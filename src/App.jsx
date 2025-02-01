@@ -4,6 +4,7 @@ import { TileLayer } from "react-leaflet/TileLayer";
 import { Popup } from "react-leaflet/Popup";
 import "leaflet/dist/leaflet.css";
 import { useNeighborhoods } from "./App.hooks";
+import { Chart } from "./Chart";
 
 function App() {
   const { geojson, selectNeighborhood, selectedNeighborhood } =
@@ -33,15 +34,8 @@ function App() {
             },
           }}
         >
-          <Popup>
-            <h1>{selectedNeighborhood.name}</h1>
-            <ul>
-              {selectedNeighborhood.population.map(({ ano, populacao }, i) => (
-                <p key={i}>
-                  {ano}: {populacao}
-                </p>
-              ))}
-            </ul>
+          <Popup minWidth={250}>
+            <Chart neighborhood={selectedNeighborhood} />
           </Popup>
         </GeoJSON>
       )}
