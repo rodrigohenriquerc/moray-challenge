@@ -1,4 +1,3 @@
-import React from "react";
 import { GeoJSON } from "react-leaflet/GeoJSON";
 import { MapContainer } from "react-leaflet/MapContainer";
 import { TileLayer } from "react-leaflet/TileLayer";
@@ -11,7 +10,6 @@ import styles from "./App.module.scss";
 function App() {
   const {
     geojson,
-    population,
     status,
     isFailure,
     retry,

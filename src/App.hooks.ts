@@ -92,7 +92,6 @@ export const useNeighborhoods = () => {
 
   return {
     geojson,
-    population,
     status,
     retry,
     isFailure,
