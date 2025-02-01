@@ -1,6 +1,6 @@
 import { ILoadGeojsonUseCase } from "../domain/usecases/load-geojson.usecase";
-import { ILoadNeighborhoodsUseCase } from "../domain/usecases/load-neighbordhoods.usecase";
 import { ILoadPopulationUseCase } from "../domain/usecases/load-population.usecase";
+import { ILoadNeighborhoodsUseCase } from "../domain/usecases/load-neighbordhoods.usecase";
 
 export class LoadNeighborhoods implements ILoadNeighborhoodsUseCase {
   constructor(

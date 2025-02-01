@@ -1,4 +1,4 @@
-import { IPopulationEntity } from "../domain/entities/Population.entity";
+import { IPopulationEntity } from "../domain/entities/population.entity";
 import { ILoadPopulationUseCase } from "../domain/usecases/load-population.usecase";
 import { IHttpClient } from "../types";
 

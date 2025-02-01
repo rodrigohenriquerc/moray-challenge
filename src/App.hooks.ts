@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { makeLoadNeightborhoods } from "./factories/load-neighborhoods.factory";
-import { IGeojsonEntity } from "./domain/entities/Geojson.entity";
-import { IPopulationEntity } from "./domain/entities/Population.entity";
+import { IGeojsonEntity } from "./domain/entities/geojson.entity";
+import { IPopulationEntity } from "./domain/entities/population.entity";
 import { ILoadNeighborhoodsUseCase } from "./domain/usecases/load-neighbordhoods.usecase";
 import { makeLoadGeojson } from "./factories/load-geojson.factory";
 import { makeLoadPopulation } from "./factories/load-population.factory";
@@ -79,7 +79,9 @@ export const useNeighborhoods = () => {
       population_failed: loadOnlyPopulation,
     };
 
-    method_by_status[status]();
+    if (status !== "success" && status !== "loading") {
+      method_by_status[status]();
+    }
   };
 
   const isFailure = status.includes("failed");

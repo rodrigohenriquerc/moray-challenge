@@ -1,5 +1,5 @@
-import { IGeojsonEntity } from "../entities/Geojson.entity";
-import { IPopulationEntity } from "../entities/Population.entity";
+import { IGeojsonEntity } from "../entities/geojson.entity";
+import { IPopulationEntity } from "../entities/population.entity";
 
 export declare namespace ILoadNeighborhoodsUseCase {
   export type TStatus =
