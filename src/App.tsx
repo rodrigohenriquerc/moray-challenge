@@ -1,3 +1,4 @@
+import React from "react";
 import { GeoJSON } from "react-leaflet/GeoJSON";
 import { MapContainer } from "react-leaflet/MapContainer";
 import { TileLayer } from "react-leaflet/TileLayer";
@@ -35,7 +36,12 @@ function App() {
           }}
         >
           <Popup minWidth={250}>
-            <Chart neighborhood={selectedNeighborhood} />
+            {selectedNeighborhood && (
+              <Chart
+                name={selectedNeighborhood.name}
+                population={selectedNeighborhood.population}
+              />
+            )}
           </Popup>
         </GeoJSON>
       )}

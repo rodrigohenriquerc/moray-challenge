@@ -1,12 +1,15 @@
 import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
+import { IGeojson, IPopulation } from "./App.types";
 
 export const useNeighborhoods = () => {
-  const [geojson, setGeojson] = useState(null);
-  const [population, setPopulation] = useState([]);
-  const [selectedNeighborhoodId, setSelectedNeighborhoodId] = useState(null);
+  const [geojson, setGeojson] = useState<IGeojson | null>(null);
+  const [population, setPopulation] = useState<IPopulation[]>([]);
+  const [selectedNeighborhoodId, setSelectedNeighborhoodId] = useState<
+    number | null
+  >(null);
 
-  const selectNeighborhood = (id) => {
+  const selectNeighborhood = (id: number) => {
     setSelectedNeighborhoodId(id);
   };
 
@@ -14,9 +17,10 @@ export const useNeighborhoods = () => {
     if (!geojson) return null;
 
     return {
-      name: geojson.features.find(
-        (feature) => feature.properties.id === selectedNeighborhoodId
-      )?.properties.name,
+      name:
+        geojson.features.find(
+          (feature) => feature.properties.id === selectedNeighborhoodId
+        )?.properties.name || "",
       population: population.filter(
         ({ id_geometria }) => id_geometria === selectedNeighborhoodId
       ),
@@ -25,12 +29,12 @@ export const useNeighborhoods = () => {
 
   useEffect(() => {
     const fetchGeojson = async () => {
-      const resp = await axios.get("/bairros-geojson");
+      const resp = await axios.get<IGeojson>("/bairros-geojson");
       setGeojson(resp.data);
     };
 
     const fetchPopulation = async () => {
-      const resp = await axios.get("/populacao");
+      const resp = await axios.get<IPopulation[]>("/populacao");
       setPopulation(resp.data);
     };
 

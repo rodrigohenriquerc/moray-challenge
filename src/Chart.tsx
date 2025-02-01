@@ -1,4 +1,4 @@
-/* eslint-disable react/prop-types */
+import React from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,6 +10,7 @@ import {
 } from "chart.js";
 import { useMemo } from "react";
 import { Bar } from "react-chartjs-2";
+import { IPopulation } from "./App.types";
 
 ChartJS.register(
   CategoryScale,
@@ -20,15 +21,17 @@ ChartJS.register(
   Legend
 );
 
-export const Chart = ({ neighborhood }) => {
-  const labels = useMemo(
-    () => neighborhood.population.map(({ ano }) => ano),
-    [neighborhood.population]
-  );
+interface IProps {
+  name: string;
+  population: IPopulation[];
+}
+
+export const Chart: React.FC<IProps> = ({ name, population }) => {
+  const labels = useMemo(() => population.map(({ ano }) => ano), [population]);
 
   const data = useMemo(
-    () => neighborhood.population.map(({ populacao }) => populacao),
-    [neighborhood.population]
+    () => population.map(({ populacao }) => populacao),
+    [population]
   );
 
   return (
@@ -40,7 +43,7 @@ export const Chart = ({ neighborhood }) => {
           },
           title: {
             display: true,
-            text: neighborhood.name,
+            text: name,
           },
         },
         aspectRatio: 1,

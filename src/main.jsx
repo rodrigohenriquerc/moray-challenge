@@ -1,7 +1,7 @@
 import './main.scss';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.jsx';
+import App from './App.tsx';
 
 export const initAPIMock = async () => {
   const { worker } = await import("./server/worker.js")
