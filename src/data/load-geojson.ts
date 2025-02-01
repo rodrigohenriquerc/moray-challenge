@@ -1,4 +1,4 @@
-import { IGeojsonEntity } from "../domain/entities/Geojson.entity";
+import { IGeojsonEntity } from "../domain/entities/geojson.entity";
 import { ILoadGeojsonUseCase } from "../domain/usecases/load-geojson.usecase";
 import { IHttpClient } from "../types";
 

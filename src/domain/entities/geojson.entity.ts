@@ -1,3 +1,5 @@
+import { GeoJSON } from "react-leaflet";
+
 export interface IGeojsonEntity extends GeoJSON.GeoJsonObject {
   name: string;
   crs: {
