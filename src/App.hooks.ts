@@ -1,10 +1,22 @@
-import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
-import { IGeojson, IPopulation } from "./App.types";
+import { makeLoadNeightborhoods } from "./factories/load-neighborhoods.factory";
+import { IGeojsonEntity } from "./domain/entities/Geojson.entity";
+import { IPopulationEntity } from "./domain/entities/Population.entity";
+import { ILoadNeighborhoodsUseCase } from "./domain/usecases/load-neighbordhoods.usecase";
+import { makeLoadGeojson } from "./factories/load-geojson.factory";
+import { makeLoadPopulation } from "./factories/load-population.factory";
+
+const loadNeighborhoods = makeLoadNeightborhoods();
+const loadGeojson = makeLoadGeojson();
+const loadPopulation = makeLoadPopulation();
 
 export const useNeighborhoods = () => {
-  const [geojson, setGeojson] = useState<IGeojson | null>(null);
-  const [population, setPopulation] = useState<IPopulation[]>([]);
+  const [geojson, setGeojson] = useState<IGeojsonEntity | null>(null);
+  const [population, setPopulation] = useState<IPopulationEntity[]>([]);
+  const [status, setStatus] = useState<
+    ILoadNeighborhoodsUseCase.TStatus | "loading"
+  >("loading");
+
   const [selectedNeighborhoodId, setSelectedNeighborhoodId] = useState<
     number | null
   >(null);
@@ -27,20 +39,62 @@ export const useNeighborhoods = () => {
     };
   }, [geojson, population, selectedNeighborhoodId]);
 
+  const loadAll = async () => {
+    setStatus("loading");
+    const response = await loadNeighborhoods.handle();
+    setGeojson(response.geojson.data);
+    setPopulation(response.population.data);
+    setStatus(response.status);
+  };
+
+  const loadOnlyGeojson = async () => {
+    setStatus("loading");
+    try {
+      const data = await loadGeojson.handle();
+      setGeojson(data);
+      setStatus("success");
+    } catch {
+      setStatus("geojson_failed");
+    }
+  };
+
+  const loadOnlyPopulation = async () => {
+    setStatus("loading");
+    try {
+      const data = await loadPopulation.handle();
+      setPopulation(data);
+      setStatus("success");
+    } catch {
+      setStatus("population_failed");
+    }
+  };
+
+  const retry = () => {
+    const method_by_status: Record<
+      Exclude<ILoadNeighborhoodsUseCase.TStatus, "success">,
+      () => {}
+    > = {
+      both_failed: loadAll,
+      geojson_failed: loadOnlyGeojson,
+      population_failed: loadOnlyPopulation,
+    };
+
+    method_by_status[status]();
+  };
+
+  const isFailure = status.includes("failed");
+
   useEffect(() => {
-    const fetchGeojson = async () => {
-      const resp = await axios.get<IGeojson>("/bairros-geojson");
-      setGeojson(resp.data);
-    };
-
-    const fetchPopulation = async () => {
-      const resp = await axios.get<IPopulation[]>("/populacao");
-      setPopulation(resp.data);
-    };
-
-    fetchGeojson();
-    fetchPopulation();
+    loadAll();
   }, []);
 
-  return { geojson, selectNeighborhood, selectedNeighborhood };
+  return {
+    geojson,
+    population,
+    status,
+    retry,
+    isFailure,
+    selectNeighborhood,
+    selectedNeighborhood,
+  };
 };

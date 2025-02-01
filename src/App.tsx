@@ -6,10 +6,18 @@ import { Popup } from "react-leaflet/Popup";
 import "leaflet/dist/leaflet.css";
 import { useNeighborhoods } from "./App.hooks";
 import { Chart } from "./Chart";
+import styles from "./App.module.scss";
 
 function App() {
-  const { geojson, selectNeighborhood, selectedNeighborhood } =
-    useNeighborhoods();
+  const {
+    geojson,
+    population,
+    status,
+    isFailure,
+    retry,
+    selectNeighborhood,
+    selectedNeighborhood,
+  } = useNeighborhoods();
 
   return (
     <MapContainer
@@ -44,6 +52,20 @@ function App() {
             )}
           </Popup>
         </GeoJSON>
+      )}
+
+      {status === "loading" && (
+        <div className={styles.feedback_container}>
+          <div className={styles.loader} />
+        </div>
+      )}
+
+      {isFailure && (
+        <div className={styles.feedback_container}>
+          <button onClick={retry} className={styles.retry_button}>
+            Tentar novamente
+          </button>
+        </div>
       )}
     </MapContainer>
   );
