@@ -47,6 +47,7 @@ export const Chart: React.FC<IProps> = ({ name, population }) => {
           },
         },
         aspectRatio: 1,
+        locale: "pt-BR",
       }}
       data={{
         labels,
